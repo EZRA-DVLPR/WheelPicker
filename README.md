@@ -1,4 +1,16 @@
-# Obsidian Sample Plugin
+# Wheel Picker Obsidian Plugin
+
+## What is it?
+
+This plugin is designed to randomly select an item from a list.
+
+## How to use it?
+
+'''
+>Insert Code Here
+'''
+
+# Obsidian Sample Plugin -- This is for me!
 
 This is a sample plugin for Obsidian (https://obsidian.md).
 
@@ -60,30 +72,6 @@ Quick starting guide for new plugin devs:
 - This project already has eslint preconfigured, you can invoke a check by running`npm run lint`
 - Together with a custom eslint [plugin](https://github.com/obsidianmd/eslint-plugin) for Obsidan specific code guidelines.
 - A GitHub action is preconfigured to automatically lint every commit on all branches.
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
-```
-
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
 
 ## API Documentation
 
