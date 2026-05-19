@@ -1,4 +1,12 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin } from "obsidian";
+import {
+	App,
+	Editor,
+	MarkdownView,
+	Modal,
+	Notice,
+	Plugin,
+	setIcon,
+} from "obsidian";
 import {
 	DEFAULT_SETTINGS,
 	WheelPickerSettings,
@@ -13,6 +21,84 @@ export default class WheelPicker extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
+		// reads the markdown and displays it as a table in view mode
+		this.registerMarkdownCodeBlockProcessor("wp", (source, el, ctx) => {
+			//grabs all non-empty rows from source text
+			const rows = source.split("\n").filter((row) => row.length > 0);
+
+			//create wheel div
+			const wheel = el.createEl("div", { cls: "wheel__container" });
+
+			// extracts the title from the first line (row)
+			// eg: -My Wheel Title- --> My Wheel Title (as H2 title)
+			const title = wheel.createEl("h2", { text: rows[0].split("-")[1] });
+
+			//remove the first row
+			rows.shift();
+
+			//wheel size
+			const size = 500;
+			const r = size / 2;
+			const cx = r;
+			const cy = r;
+			const n = rows.length;
+			const slice = (2 * Math.PI) / n;
+
+			//color sequence
+			const rainbow = [
+				"#e74c3c",
+				"#e67e22",
+				"#f1c40f",
+				"#2ecc71",
+				"#3498db",
+				"#9b59b6",
+			];
+
+			const NS = "http://www.w3.org/2000/svg";
+			const svg = document.createElementNS(NS, "svg");
+			svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+			svg.setAttribute("width", `${size}`);
+			svg.setAttribute("height", `${size}`);
+
+			rows.forEach((row, i) => {
+				const a1 = slice * i - Math.PI / 2;
+				const a2 = slice * (i + 1) - Math.PI / 2;
+				const x1 = cx + Math.cos(a1) * r;
+				const y1 = cy + Math.sin(a1) * r;
+				const x2 = cx + Math.cos(a2) * r;
+				const y2 = cy + Math.sin(a2) * r;
+				const large = slice > Math.PI ? 1 : 0;
+
+				const path = document.createElementNS(NS, "path");
+				path.setAttribute(
+					"d",
+					`M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} Z`,
+				);
+				path.setAttribute("fill", rainbow[i % rainbow.length]);
+				path.setAttribute("stroke", "#fff");
+				path.setAttribute("stroke-width", "2");
+				svg.appendChild(path);
+
+				const mid = (a1 + a2) / 2;
+				const lx = cx + Math.cos(mid) * r * 0.65;
+				const ly = cy + Math.sin(mid) * r * 0.65;
+
+				const text = document.createElementNS(NS, "text");
+				text.setAttribute("x", `${lx}`);
+				text.setAttribute("y", `${ly}`);
+				text.setAttribute("text-anchor", "middle");
+				text.setAttribute("dominant-baseline", "middle");
+				text.setAttribute("fill", "#fff");
+				//font size
+				text.setAttribute("font-size", "25");
+				text.setAttribute("font-family", "sans-serif");
+				text.textContent = row;
+				svg.appendChild(text);
+			});
+
+			wheel.appendChild(svg);
+		});
+
 		// This creates an icon in the left ribbon.
 		this.addRibbonIcon(
 			"loader-pinwheel",
@@ -23,14 +109,15 @@ export default class WheelPicker extends Plugin {
 			},
 		);
 
-		// Adds an icon
+		//PERF: Perhaps make this display how many items are in the wheel on the
+		// current note?
+		// Adds a pinwheel icon
 		const item = this.addStatusBarItem();
-		setIcon(item, "shredder");
+		setIcon(item, "loader-pinwheel");
 
-		//PERF: Perhaps make this display how many items are in the wheel on the current note?
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText("Pee Pee Poo Poo");
+		statusBarItemEl.setText("X Wheels");
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
@@ -75,9 +162,9 @@ export default class WheelPicker extends Plugin {
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
-		this.registerDomEvent(document, "click", (evt: MouseEvent) => {
-			new Notice("Click");
-		});
+		//this.registerDomEvent(document, "click", (evt: MouseEvent) => {
+		//	new Notice("Click");
+		//});
 	}
 
 	onunload() {}

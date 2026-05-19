@@ -49,5 +49,15 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 						console.log(this.plugin.settings.localServer);
 					}),
 			);
+
+		//TODO: settings options:
+		//
+		//circle size slider
+		//
+		//color sequence array
+		//
+		//text size slider
+		//
+		//
 	}
 }
