@@ -14,15 +14,23 @@ export default class WheelPicker extends Plugin {
 		await this.loadSettings();
 
 		// This creates an icon in the left ribbon.
-		this.addRibbonIcon("loader-pinwheel", "Sample", (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
-			new Notice("This is a notice!");
-		});
+		this.addRibbonIcon(
+			"loader-pinwheel",
+			"Wheel-Picker",
+			(evt: MouseEvent) => {
+				// Called when the user clicks the icon.
+				new Notice("This is a notice!");
+			},
+		);
 
-		//PERF: Perhaps make this display how many items are in the wheel?
+		// Adds an icon
+		const item = this.addStatusBarItem();
+		setIcon(item, "shredder");
+
+		//PERF: Perhaps make this display how many items are in the wheel on the current note?
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText("Status bar text");
+		statusBarItemEl.setText("Pee Pee Poo Poo");
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
