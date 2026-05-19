@@ -2,7 +2,7 @@ import { App, Editor, MarkdownView, Modal, Notice, Plugin } from "obsidian";
 import {
 	DEFAULT_SETTINGS,
 	WheelPickerSettings,
-	SampleSettingTab,
+	WheelPickerSettingTab,
 } from "./settings";
 
 // Remember to rename these classes and interfaces!
