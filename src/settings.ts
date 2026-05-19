@@ -34,5 +34,20 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					}),
 			);
+
+		new Setting(containerEl)
+			.setName("Wheel Spin")
+			.setDesc("On --> Wheel spins. Off --> Wheel won't spin.")
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.localServer)
+					.onChange(async (value) => {
+						this.plugin.settings.localServer =
+							!this.plugin.settings.localServer;
+						await this.plugin.saveSettings();
+						this.display();
+						console.log(this.plugin.settings.localServer);
+					}),
+			);
 	}
 }
