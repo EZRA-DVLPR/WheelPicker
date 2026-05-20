@@ -198,7 +198,7 @@ export default class WheelPicker extends Plugin {
 		// This creates an icon in the left ribbon.
 		this.addRibbonIcon(
 			"loader-pinwheel",
-			"WheelPicker",
+			"Wheelpicker",
 			(evt: MouseEvent) => {
 				// Called when the user clicks the icon.
 				new Notice("This is a notice!");
