@@ -43,7 +43,7 @@ export default class WheelPicker extends Plugin {
 			// extracts the title from the first line (row)
 			// eg: -My Wheel Title- --> My Wheel Title (as H2 title)
 			const title = wheel.createEl("h2", {
-				text: rows[0].split("-")[1] ?? "My Wheel",
+				text: rows[0]?.split("-")[1] ?? "My Wheel",
 			});
 
 			//remove the first row since its just the title
@@ -134,7 +134,10 @@ export default class WheelPicker extends Plugin {
 				);
 				//assign slice attributes
 				//PERF: based on rainbow which will be a color setting in the future
-				path.setAttribute("fill", rainbow[i % rainbow.length]);
+				path.setAttribute(
+					"fill",
+					rainbow[i % rainbow.length] ?? "#535553",
+				);
 				//TODO: setting
 				//separation color
 				path.setAttribute("stroke", "#ffffff");
