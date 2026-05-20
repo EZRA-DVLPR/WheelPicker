@@ -42,8 +42,9 @@ export default class WheelPicker extends Plugin {
 
 			// extracts the title from the first line (row)
 			// eg: -My Wheel Title- --> My Wheel Title (as H2 title)
+			const headertitle = rows[0]?.split("-")[1];
 			const title = wheel.createEl("h2", {
-				text: rows[0]?.split("-")[1] ?? "My Wheel",
+				text: headertitle ?? "My Wheel",
 			});
 
 			//remove the first row since its just the title
@@ -124,7 +125,7 @@ export default class WheelPicker extends Plugin {
 					//	radius (determined by size / 2)
 					//	no rotation (thus preventing any stretching of the arc)
 					//	large boolean flag (decides to draw > 180 deg or not) [see this page:https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths]
-					//	sweep flag (always 1 since we want the positive angle => cw drawing direction)
+					//	sweep flag (always 1 since we want the positive angle => draw cw direction)
 					//	ending at (x2, y2)
 					//then returning to the origin (cx, cy) which is implied with Z
 					`M ${cx} ${cy} 
@@ -191,8 +192,27 @@ export default class WheelPicker extends Plugin {
 				svg.appendChild(text);
 			});
 
-			//apply svg to wheel
-			wheel.appendChild(svg);
+			//wrap SVG in it's own relative container
+			const wheelSvgWrapper = wheel.createEl("div", {
+				cls: "wheel__svg-wrapper",
+			});
+			wheelSvgWrapper.appendChild(svg);
+
+			//INFO: now we are going to add the 'spin' button
+			const spinbtn = wheelSvgWrapper.createEl("button", {
+				text: "Spin!",
+				cls: "wheel__btn",
+			});
+
+			this.registerDomEvent(spinbtn, "click", () => {
+				//TODO: spin animation of the wheel
+
+				//obtain a random result from rows
+				const res = rows[Math.floor(Math.random() * rows.length)];
+
+				//open modal with content
+				new WheelPickerModal(this.app, res).open();
+			});
 		});
 
 		// This creates an icon in the left ribbon.
@@ -279,17 +299,8 @@ export default class WheelPicker extends Plugin {
 }
 
 class WheelPickerModal extends Modal {
-	constructor(app: App) {
+	constructor(app: App, content: string) {
 		super(app);
-	}
-
-	onOpen() {
-		let { contentEl } = this;
-		contentEl.setText("Woah!");
-	}
-
-	onClose() {
-		const { contentEl } = this;
-		contentEl.empty();
+		this.setTitle(content);
 	}
 }

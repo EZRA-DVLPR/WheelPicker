@@ -2,8 +2,19 @@
   padding: 10px;
 }
 
+.wheel__svg-wrapper {
+	position: relative;
+	display: inline-block;
+}
+
 .wheel__container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 }
+
+.wheel__btn {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
