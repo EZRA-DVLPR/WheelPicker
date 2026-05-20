@@ -22,6 +22,13 @@ export default class WheelPicker extends Plugin {
 		await this.loadSettings();
 
 		// reads the markdown and displays it as a table in view mode
+		// eg.
+		// ```wp
+		// -TITLE-
+		// first element
+		// second element
+		// ...
+		// ```
 		this.registerMarkdownCodeBlockProcessor("wp", (source, el, ctx) => {
 			//grabs all non-empty rows from source text
 			const rows = source.split("\n").filter((row) => row.length > 0);
@@ -33,17 +40,20 @@ export default class WheelPicker extends Plugin {
 			// eg: -My Wheel Title- --> My Wheel Title (as H2 title)
 			const title = wheel.createEl("h2", { text: rows[0].split("-")[1] });
 
-			//remove the first row
+			//remove the first row since its just the title
 			rows.shift();
 
+			//TODO: setting
 			//wheel size
 			const size = 500;
 			const r = size / 2;
 			const cx = r;
 			const cy = r;
 			const n = rows.length;
+			//angle of each row slice
 			const slice = (2 * Math.PI) / n;
 
+			//TODO: setting
 			//color sequence
 			const rainbow = [
 				"#e74c3c",
@@ -54,48 +64,118 @@ export default class WheelPicker extends Plugin {
 				"#9b59b6",
 			];
 
+			//declare svg then set sizing for wheel viewbox
 			const NS = "http://www.w3.org/2000/svg";
 			const svg = document.createElementNS(NS, "svg");
-			svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+			//WARN: this is based on a future defined var (stroke width)
+			//will eventually be fixed when it becomes a setting
+			const pad = 2;
+			//svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+			svg.setAttribute(
+				"viewBox",
+				`${-pad} ${-pad} ${size + pad * 2} ${size + pad * 2}`,
+			);
 			svg.setAttribute("width", `${size}`);
 			svg.setAttribute("height", `${size}`);
 
+			//each row represents a slice, which will be displayed with:
+			//	1. path for the slice cutout
+			//	2. text for the row data
 			rows.forEach((row, i) => {
+				//INFO: now we are going to add the slices
+				//calculate the angle for the division lines:
+				//	a1 = start division line
+				//	a2 = end division line
 				const a1 = slice * i - Math.PI / 2;
 				const a2 = slice * (i + 1) - Math.PI / 2;
+
+				//(x1, y1) is the point form for the end of the start division line
 				const x1 = cx + Math.cos(a1) * r;
 				const y1 = cy + Math.sin(a1) * r;
+
+				//(x2, y2) is the point form for the end of the end division line
 				const x2 = cx + Math.cos(a2) * r;
 				const y2 = cy + Math.sin(a2) * r;
+
+				//used for arc -- boolean that is true if angle > 180 deg (or pi rad) and false o/w
 				const large = slice > Math.PI ? 1 : 0;
 
+				//create path (slice) visually
 				const path = document.createElementNS(NS, "path");
 				path.setAttribute(
+					//draw (technically data, but in this case draw)
 					"d",
-					`M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} Z`,
+					//starting at (cx, cy) (AKA origin)
+					//draw a line to (x1,y1)
+					//then an arc with:
+					//	radius (determined by size / 2)
+					//	no rotation (thus preventing any stretching of the arc)
+					//	large boolean flag (decides to draw > 180 deg or not) [see this page:https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths]
+					//	sweep flag (always 1 since we want the positive angle => cw drawing direction)
+					//	ending at (x2, y2)
+					//then returning to the origin (cx, cy) which is implied with Z
+					`M ${cx} ${cy} 
+					L ${x1} ${y1} 
+					A ${r} ${r} 0 ${large} 1 ${x2} ${y2} 
+					Z`,
 				);
+				//assign slice attributes
+				//PERF: based on rainbow which will be a color setting in the future
 				path.setAttribute("fill", rainbow[i % rainbow.length]);
-				path.setAttribute("stroke", "#fff");
+				//TODO: setting
+				//separation color
+				path.setAttribute("stroke", "#ffffff");
+				//TODO: setting
+				//separation stroke width
 				path.setAttribute("stroke-width", "2");
 				svg.appendChild(path);
 
+				//INFO: now we are going to add the text from the row
+				//the middle of the two angles (as radians)
 				const mid = (a1 + a2) / 2;
-				const lx = cx + Math.cos(mid) * r * 0.65;
-				const ly = cy + Math.sin(mid) * r * 0.65;
 
+				//calculate point (lx, ly) which is the where the text will be centered
+				//we multiply by .69 (ayyy lmao) to shift this location inside of the slice
+				//instead of it being on the arc's outer border
+				//thus preventing the text from extending outwards past the bounds
+				const lx = cx + Math.cos(mid) * r * 0.69;
+				const ly = cy + Math.sin(mid) * r * 0.69;
+
+				//actually create the text element that will be added
 				const text = document.createElementNS(NS, "text");
+
+				//assign coordinates (lx, ly)
 				text.setAttribute("x", `${lx}`);
 				text.setAttribute("y", `${ly}`);
+
+				//make the center of the text the reference point
 				text.setAttribute("text-anchor", "middle");
 				text.setAttribute("dominant-baseline", "middle");
+
+				//TODO: setting
+				//text color
+				//assign the text attributes
 				text.setAttribute("fill", "#fff");
+				//TODO: setting
 				//font size
 				text.setAttribute("font-size", "25");
+				//TODO: setting
+				//font style
 				text.setAttribute("font-family", "sans-serif");
+
+				//display angle for text so that it follows the center of the angle
+				text.setAttribute(
+					"transform",
+					//convert angle to degrees from rad and use that as the rotation angle
+					//over the coordinates (lx, ly)
+					`rotate(${mid * (180 / Math.PI)}, ${lx}, ${ly})`,
+				);
+				//insert the text
 				text.textContent = row;
 				svg.appendChild(text);
 			});
 
+			//apply svg to wheel
 			wheel.appendChild(svg);
 		});
 

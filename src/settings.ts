@@ -58,6 +58,18 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 		//
 		//text size slider
 		//
+		//toggle ordering cw (default) or ccw
 		//
+		//perhaps an option to change whether the first line separation for the first slice is at 12 or 3
+		//
+		//separation color between slices (text enter)
+		//
+		//separation stroke width
+		//
+		//text color (text enter)
+		//
+		//text size (slider)
+		//
+		//text font (text enter)
 	}
 }
