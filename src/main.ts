@@ -1,19 +1,11 @@
-import {
-	App,
-	Editor,
-	MarkdownView,
-	Modal,
-	Notice,
-	Plugin,
-	setIcon,
-} from "obsidian";
+import { App, Editor, MarkdownView, Notice, Plugin, setIcon } from "obsidian";
 import {
 	DEFAULT_SETTINGS,
 	WheelPickerSettings,
 	WheelPickerSettingTab,
 } from "./settings";
 
-// Remember to rename these classes and interfaces!
+import WheelPickerModal from "./modal";
 
 export default class WheelPicker extends Plugin {
 	settings: WheelPickerSettings;
@@ -315,15 +307,5 @@ export default class WheelPicker extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
-	}
-}
-
-class WheelPickerModal extends Modal {
-	constructor(app: App, content: string) {
-		super(app);
-		this.contentEl.createEl("p", {
-			text: content,
-			cls: "wheel__modal-text",
-		});
 	}
 }
