@@ -42,10 +42,19 @@ export default class WheelPicker extends Plugin {
 
 			// extracts the title from the first line (row)
 			// eg: -My Wheel Title- --> My Wheel Title (as H2 title)
-			const title = wheel.createEl("h2", { text: rows[0].split("-")[1] });
+			const title = wheel.createEl("h2", {
+				text: rows[0].split("-")[1] ?? "My Wheel",
+			});
 
 			//remove the first row since its just the title
 			rows.shift();
+
+			if (rows.length === 0) {
+				return;
+			}
+
+			//TODO: handle case where there is only 1 row
+			//i.e. just make a circle with the central text being the row data
 
 			//TODO: setting
 			//wheel size
