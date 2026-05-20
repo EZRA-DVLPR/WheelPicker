@@ -205,13 +205,33 @@ export default class WheelPicker extends Plugin {
 			});
 
 			this.registerDomEvent(spinbtn, "click", () => {
-				//TODO: spin animation of the wheel
+				//disable button while the button is spinning
+				spinbtn.disabled = true;
 
-				//obtain a random result from rows
-				const res = rows[Math.floor(Math.random() * rows.length)];
+				//animation of the wheel (remove, then add so that it spins properly)
+				svg.classList.remove("wheel__spin");
+				//needs this to separate removing and adding of wheel spin onto diff ticks
+				//this allows for re-spinning the wheel to occur properly
+				//might not be needed from my testing, but doesn't cost anything to keep
+				void svg.offsetWidth;
+				svg.classList.add("wheel__spin");
 
-				//open modal with content
-				new WheelPickerModal(this.app, res).open();
+				//TODO: setting for animation to spin finish
+				//run after 3 seconds
+				setTimeout(() => {
+					//obtain a random result (row) from rows
+					const res = rows[Math.floor(Math.random() * rows.length)];
+
+					//open modal with result
+					new WheelPickerModal(this.app, res).open();
+
+					//allow button interaction since everything is done
+					spinbtn.disabled = false;
+				}, 3000);
+			});
+
+			this.registerDomEvent(svg, "animationend", () => {
+				svg.classList.remove("wheel__spin");
 			});
 		});
 
@@ -301,6 +321,9 @@ export default class WheelPicker extends Plugin {
 class WheelPickerModal extends Modal {
 	constructor(app: App, content: string) {
 		super(app);
-		this.setTitle(content);
+		this.contentEl.createEl("p", {
+			text: content,
+			cls: "wheel__modal-text",
+		});
 	}
 }
