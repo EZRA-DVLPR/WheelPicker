@@ -38,8 +38,10 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("Wheel Spin")
-			.setDesc("On --> Wheel spins. Off --> Wheel won't spin.")
+			.setName("Wheel spin")
+			.setDesc(
+				"On means the wheel spins. Off means the wheel won't spin.",
+			)
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.wheelSpin)
@@ -48,7 +50,6 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 							!this.plugin.settings.wheelSpin;
 						await this.plugin.saveSettings();
 						this.display();
-						console.log(this.plugin.settings.wheelSpin);
 					}),
 			);
 

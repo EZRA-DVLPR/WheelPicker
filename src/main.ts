@@ -198,7 +198,7 @@ export default class WheelPicker extends Plugin {
 		// This creates an icon in the left ribbon.
 		this.addRibbonIcon(
 			"loader-pinwheel",
-			"Wheel-Picker",
+			"WheelPicker",
 			(evt: MouseEvent) => {
 				// Called when the user clicks the icon.
 				new Notice("This is a notice!");
@@ -213,7 +213,7 @@ export default class WheelPicker extends Plugin {
 
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText("X Wheels");
+		statusBarItemEl.setText("X");
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
