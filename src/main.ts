@@ -1,4 +1,4 @@
-import { App, Editor, MarkdownView, Notice, Plugin, setIcon } from "obsidian";
+import { type App, MarkdownView, Notice, Plugin, setIcon } from "obsidian";
 import {
 	DEFAULT_SETTINGS,
 	WheelPickerSettings,
@@ -12,8 +12,9 @@ export default class WheelPicker extends Plugin {
 
 	async onload() {
 		await this.loadSettings();
+		this.addSettingTab(new WheelPickerSettingTab(this.app, this));
 
-		// reads the markdown and displays it as a table in view mode
+		// reads the markdown and displays its contents
 		// eg.
 		// ```wp
 		// -TITLE-
@@ -197,6 +198,12 @@ export default class WheelPicker extends Plugin {
 			});
 
 			this.registerDomEvent(spinbtn, "click", () => {
+				//read duration setting when clicked
+				svg.style.setProperty(
+					"--spin-duration",
+					`${this.settings.animationTime}s`,
+				);
+
 				//disable button while the button is spinning
 				spinbtn.disabled = true;
 
@@ -208,18 +215,22 @@ export default class WheelPicker extends Plugin {
 				void svg.offsetWidth;
 				svg.classList.add("wheel__spin");
 
-				//TODO: setting for animation to spin finish
-				//run after 3 seconds
-				setTimeout(() => {
-					//obtain a random result (row) from rows
-					const res = rows[Math.floor(Math.random() * rows.length)];
+				//wait for animation to finish, then continue processing
+				setTimeout(
+					() => {
+						//obtain a random result (row) from rows
+						const res =
+							rows[Math.floor(Math.random() * rows.length)];
 
-					//open modal with result
-					new WheelPickerModal(this.app, res).open();
+						//open modal with result
+						new WheelPickerModal(this.app, res).open();
 
-					//allow button interaction since everything is done
-					spinbtn.disabled = false;
-				}, 3000);
+						//allow button interaction since everything is done
+						spinbtn.disabled = false;
+					},
+					//multiply animation time * 1000 to convert ms to s
+					this.settings.animationTime * 1000,
+				);
 			});
 
 			this.registerDomEvent(svg, "animationend", () => {
@@ -253,14 +264,6 @@ export default class WheelPicker extends Plugin {
 			name: "Open modal (simple)",
 			callback: () => {
 				new WheelPickerModal(this.app).open();
-			},
-		});
-		// This adds an editor command that can perform some operation on the current editor instance
-		this.addCommand({
-			id: "replace-selected",
-			name: "Replace selected content",
-			editorCallback: (editor: Editor, view: MarkdownView) => {
-				editor.replaceSelection("Sample editor command");
 			},
 		});
 		// This adds a complex command that can check whether the current state of the app allows execution of the command

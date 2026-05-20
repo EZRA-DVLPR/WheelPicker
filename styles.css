@@ -25,7 +25,7 @@
 }
 
 .wheel__spin {
-	animation: spin 3s ease-out;
+	animation: spin var(--spin-duration) ease-out;
 }
 
 @keyframes spin {

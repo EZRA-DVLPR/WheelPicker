@@ -1,14 +1,14 @@
-import { App, PluginSettingTab, Setting } from "obsidian";
-import WheelPicker from "./main";
+import { type App, PluginSettingTab, Setting } from "obsidian";
+import type WheelPicker from "./main";
 
 export interface WheelPickerSettings {
-	mySetting: string;
 	wheelSpin: boolean;
+	animationTime: number;
 }
 
 export const DEFAULT_SETTINGS: WheelPickerSettings = {
-	mySetting: "default",
 	wheelSpin: false,
+	animationTime: 3,
 };
 
 export class WheelPickerSettingTab extends PluginSettingTab {
@@ -21,18 +21,18 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 
 	display(): void {
 		const { containerEl } = this;
-
 		containerEl.empty();
 
+		//animation time slider
 		new Setting(containerEl)
-			.setName("Settings #1")
-			.setDesc("It's a secret")
-			.addText((text) =>
-				text
-					.setPlaceholder("Enter your secret")
-					.setValue(this.plugin.settings.mySetting)
+			.setName("Spin Duration (seconds)")
+			.addSlider((slider) =>
+				slider
+					.setLimits(0.5, 5, 0.5)
+					.setValue(this.plugin.settings.animationTime)
+					.setDynamicTooltip()
 					.onChange(async (value) => {
-						this.plugin.settings.mySetting = value;
+						this.plugin.settings.animationTime = value;
 						await this.plugin.saveSettings();
 					}),
 			);
@@ -46,8 +46,7 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 				toggle
 					.setValue(this.plugin.settings.wheelSpin)
 					.onChange(async (value) => {
-						this.plugin.settings.wheelSpin =
-							!this.plugin.settings.wheelSpin;
+						this.plugin.settings.wheelSpin = value;
 						await this.plugin.saveSettings();
 						this.display();
 					}),
@@ -74,5 +73,7 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 		//text size (slider)
 		//
 		//text font (text enter)
+		//
+		//length of history for generated things
 	}
 }
