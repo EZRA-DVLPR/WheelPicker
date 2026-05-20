@@ -33,6 +33,10 @@ export default class WheelPicker extends Plugin {
 			//grabs all non-empty rows from source text
 			const rows = source.split("\n").filter((row) => row.length > 0);
 
+			if (rows.length === 0) {
+				return;
+			}
+
 			//create wheel div
 			const wheel = el.createEl("div", { cls: "wheel__container" });
 

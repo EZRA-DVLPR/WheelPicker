@@ -3,10 +3,12 @@ import WheelPicker from "./main";
 
 export interface WheelPickerSettings {
 	mySetting: string;
+	wheelSpin: boolean;
 }
 
 export const DEFAULT_SETTINGS: WheelPickerSettings = {
 	mySetting: "default",
+	wheelSpin: false,
 };
 
 export class WheelPickerSettingTab extends PluginSettingTab {
@@ -40,13 +42,13 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 			.setDesc("On --> Wheel spins. Off --> Wheel won't spin.")
 			.addToggle((toggle) =>
 				toggle
-					.setValue(this.plugin.settings.localServer)
+					.setValue(this.plugin.settings.wheelSpin)
 					.onChange(async (value) => {
-						this.plugin.settings.localServer =
-							!this.plugin.settings.localServer;
+						this.plugin.settings.wheelSpin =
+							!this.plugin.settings.wheelSpin;
 						await this.plugin.saveSettings();
 						this.display();
-						console.log(this.plugin.settings.localServer);
+						console.log(this.plugin.settings.wheelSpin);
 					}),
 			);
 
