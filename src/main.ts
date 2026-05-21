@@ -74,9 +74,7 @@ export default class WheelPicker extends Plugin {
 			//declare svg then set sizing for wheel viewbox
 			const NS = "http://www.w3.org/2000/svg";
 			const svg = document.createElementNS(NS, "svg");
-			//WARN: this is based on a future defined var (stroke width)
-			//will eventually be fixed when it becomes a setting
-			const pad = 2;
+			const pad = this.settings.strokeWidth;
 			svg.setAttribute(
 				"viewBox",
 				`${-pad} ${-pad} ${size + pad * 2} ${size + pad * 2}`,
@@ -132,9 +130,7 @@ export default class WheelPicker extends Plugin {
 					rainbow[i % rainbow.length] ?? "#535553",
 				);
 				path.setAttribute("stroke", this.settings.strokeColor);
-				//TODO: setting
-				//separation stroke width
-				path.setAttribute("stroke-width", "2");
+				path.setAttribute("stroke-width", `${this.settings.strokeWidth}`);
 				svg.appendChild(path);
 
 				//INFO: now we are going to add the text from the row

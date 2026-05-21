@@ -7,6 +7,7 @@ export interface WheelPickerSettings {
 	wheelSize: number;
 	fontSize: number;
 	strokeColor: string;
+	strokeWidth: number;
 }
 
 export const DEFAULT_SETTINGS: WheelPickerSettings = {
@@ -14,6 +15,7 @@ export const DEFAULT_SETTINGS: WheelPickerSettings = {
 	wheelSize: 500,
 	fontSize: 25,
 	strokeColor: "#FFFFFF",
+	strokeWidth: 2,
 };
 
 export class WheelPickerSettingTab extends PluginSettingTab {
@@ -56,7 +58,7 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 						"Changes the size of the wheel (diameter) in pixels.",
 					);
 					frag.createEl("br");
-					frag.appendText("Disclaimer! This may require a restart!");
+					frag.appendText("Disclaimer: This may require a restart!");
 				}),
 			)
 			.addSlider((slider) =>
@@ -85,14 +87,40 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 					}),
 			);
 
+		//slice outline color
 		new Setting(containerEl)
-			.setName("Slice Outline Color")
+			.setName("Outline color for lines and curves")
 			.setDesc("Choose the color to show the separation between slices.")
 			.addColorPicker((color) =>
 				color.setValue("#FFFFFF").onChange(async (value) => {
 					this.plugin.settings.strokeColor = value;
 					await this.plugin.saveSettings();
 				}),
+			);
+
+		//slice stroke width
+		new Setting(containerEl)
+			.setName("Width of outline lines and curves")
+			.setDesc(
+				createFragment((frag) => {
+					frag.appendText(
+						"Changes the thickness of each separating line or arc.",
+					);
+					frag.createEl("br");
+					frag.appendText(
+						"Note: 0 thickness means there is no outline/border between slices",
+					);
+				}),
+			)
+			.addSlider((slider) =>
+				slider
+					.setLimits(0, 20, 1)
+					.setValue(this.plugin.settings.strokeWidth)
+					.setDynamicTooltip()
+					.onChange(async (value) => {
+						this.plugin.settings.strokeWidth = value;
+						await this.plugin.saveSettings();
+					}),
 			);
 
 		//TODO: settings options:
