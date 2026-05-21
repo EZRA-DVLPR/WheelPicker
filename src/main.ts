@@ -115,7 +115,10 @@ export default class WheelPicker extends Plugin {
 				//assign slice attributes
 				path.setAttribute(
 					"fill",
-					`${this.settings.customColors[i % this.settings.customColors.length]}`,
+					this.settings.customColors.length > 0 ? 
+					this.settings.customColors[i % this.settings.customColors.length]
+					//make the color white if there is none in customColors
+					: "#ffffff",
 				);
 				path.setAttribute("stroke", this.settings.strokeColor);
 				path.setAttribute("stroke-width", `${this.settings.strokeWidth}`);
@@ -278,15 +281,16 @@ export default class WheelPicker extends Plugin {
 			(await this.loadData()) as Partial<WheelPickerSettings>,
 		);
 		//ensure customColors is always populated
-		this.settings.customColors = [
-			this.settings.customColors?.[0] ?? DEFAULT_SETTINGS.customColors[0],
-			this.settings.customColors?.[1] ?? DEFAULT_SETTINGS.customColors[1],
-			this.settings.customColors?.[2] ?? DEFAULT_SETTINGS.customColors[2],
-			this.settings.customColors?.[3] ?? DEFAULT_SETTINGS.customColors[3],
-			this.settings.customColors?.[4] ?? DEFAULT_SETTINGS.customColors[4],
-			this.settings.customColors?.[5] ?? DEFAULT_SETTINGS.customColors[5],
-			this.settings.customColors?.[6] ?? DEFAULT_SETTINGS.customColors[6],
-		];
+		this.settings.customColors = this.settings.customColors?.length ? [...this.settings.customColors] : [...DEFAULT_SETTINGS.customColors];
+		//this.settings.customColors = [
+		//	this.settings.customColors?.[0] ?? DEFAULT_SETTINGS.customColors[0],
+		//	this.settings.customColors?.[1] ?? DEFAULT_SETTINGS.customColors[1],
+		//	this.settings.customColors?.[2] ?? DEFAULT_SETTINGS.customColors[2],
+		//	this.settings.customColors?.[3] ?? DEFAULT_SETTINGS.customColors[3],
+		//	this.settings.customColors?.[4] ?? DEFAULT_SETTINGS.customColors[4],
+		//	this.settings.customColors?.[5] ?? DEFAULT_SETTINGS.customColors[5],
+		//	this.settings.customColors?.[6] ?? DEFAULT_SETTINGS.customColors[6],
+		//];
 	}
 
 	async saveSettings() {

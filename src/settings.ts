@@ -10,8 +10,7 @@ export interface WheelPickerSettings {
 	strokeWidth: number;
 	textColor: string;
 	useCustomColors: boolean;
-	customColors: [string, string, string, string, string, string, string];
-	//customColors: string[];
+	customColors: string[];
 }
 
 export const DEFAULT_SETTINGS: WheelPickerSettings = {
@@ -20,16 +19,17 @@ export const DEFAULT_SETTINGS: WheelPickerSettings = {
 	fontSize: 25,
 	strokeColor: "#ffffff",
 	strokeWidth: 2,
-	textColor: "#ffffff",
+	textColor: "#000000",
 	useCustomColors: false,
 	customColors: [
-		"#de0000",
-		"#fe622c",
-		"#fef600",
-		"#00bc00",
-		"#009cfe",
-		"#000084",
-		"#2C009C",
+		//ROYGBIV
+		"#ff0000",
+		"#ff7f00",
+		"#ffff00",
+		"#00ff00",
+		"#0000ff",
+		"#4b0082",
+		"#9400d3",
 	],
 };
 
@@ -186,36 +186,28 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 							this.plugin.settings.customColors[i] = value;
 							await this.plugin.saveSettings();
 						}),
+					)
+					.addButton((btn) =>
+						btn
+							.setButtonText("Remove Color")
+							.setWarning()
+							.onClick(async () => {
+								this.plugin.settings.customColors.splice(i, 1);
+								await this.plugin.saveSettings();
+								this.display();
+							}),
 					);
 			});
-		}
 
-		//
-		//
-		//	new Setting(containerEl)
-		//		.setName("Custom Color 1")
-		//		.setDesc("The color of the first slice.")
-		//		.addColorPicker((color) => {
-		//			color
-		//				.setValue(this.plugin.settings.customColors[0])
-		//				.onChange(async (value) => {
-		//					this.plugin.settings.customColors[0] = value;
-		//					await this.plugin.saveSettings();
-		//				});
-		//		});
-		//	//custom color 2
-		//	new Setting(containerEl)
-		//		.setName("Custom Color 2")
-		//		.setDesc("The color of the second slice.")
-		//		.addColorPicker((color) => {
-		//			color
-		//				.setValue(this.plugin.settings.customColors[1])
-		//				.onChange(async (value) => {
-		//					this.plugin.settings.customColors[1] = value;
-		//					await this.plugin.saveSettings();
-		//				});
-		//		});
-		//}
+			//add new color button
+			new Setting(containerEl).addButton((btn) =>
+				btn.setButtonText("Add New Color").onClick(async () => {
+					this.plugin.settings.customColors.push("#ffffff");
+					await this.plugin.saveSettings();
+					this.display();
+				}),
+			);
+		}
 
 		//TODO: settings options:
 		//add history button
