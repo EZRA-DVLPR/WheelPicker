@@ -155,10 +155,8 @@ export default class WheelPicker extends Plugin {
 				text.setAttribute("text-anchor", "middle");
 				text.setAttribute("dominant-baseline", "middle");
 
-				//TODO: setting
-				//text color
 				//assign the text attributes
-				text.setAttribute("fill", "#fff");
+				text.setAttribute("fill", `${this.settings.textColor}`);
 				text.setAttribute("font-size", `${this.settings.fontSize}`);
 
 				//display angle for text so that it follows the center of the angle

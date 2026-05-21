@@ -8,6 +8,7 @@ export interface WheelPickerSettings {
 	fontSize: number;
 	strokeColor: string;
 	strokeWidth: number;
+	textColor: string;
 }
 
 export const DEFAULT_SETTINGS: WheelPickerSettings = {
@@ -16,6 +17,7 @@ export const DEFAULT_SETTINGS: WheelPickerSettings = {
 	fontSize: 25,
 	strokeColor: "#ffffff",
 	strokeWidth: 2,
+	textColor: "#ffffff",
 };
 
 export class WheelPickerSettingTab extends PluginSettingTab {
@@ -125,12 +127,23 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 					}),
 			);
 
+		//text color
+		new Setting(containerEl)
+			.setName("Text color")
+			.setDesc(
+				"Choose the text color to be displayed for the elements in the wheel.",
+			)
+			.addColorPicker((color) =>
+				color
+					.setValue(this.plugin.settings.textColor)
+					.onChange(async (value) => {
+						this.plugin.settings.textColor = value;
+						await this.plugin.saveSettings();
+					}),
+			);
+
 		//TODO: settings options:
 		//color sequence array
-		//
-		//text color (text enter)
-		//
-		//separation stroke width - 0 (no line width) to some upper bound
 		//
 		//add history button
 		//
