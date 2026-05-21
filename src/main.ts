@@ -1,4 +1,4 @@
-import { Plugin, setIcon, type MarkdownView } from "obsidian";
+import { Plugin, setIcon, MarkdownView } from "obsidian";
 import {
 	DEFAULT_SETTINGS,
 	WheelPickerSettings,
@@ -9,6 +9,7 @@ import { WheelPickerModal } from "./modal";
 
 export default class WheelPicker extends Plugin {
 	settings: WheelPickerSettings;
+	private animationEndListeners = new WeakMap<SVGSVGElement, () => void>();
 
 	async onload() {
 		await this.loadSettings();
@@ -115,12 +116,10 @@ export default class WheelPicker extends Plugin {
 				//assign slice attributes
 				path.setAttribute(
 					"fill",
-					this.settings.customColors.length > 0
-						? this.settings.customColors[
-								i % this.settings.customColors.length
-							]
-						: //make the color white if there is none in customColors
-							"#ffffff",
+					//make the color white if there is none in customColors
+					this.settings.customColors?.[
+						i % this.settings.customColors.length
+					] ?? "#ffffff",
 				);
 				path.setAttribute("stroke", this.settings.strokeColor);
 				path.setAttribute(
@@ -191,10 +190,6 @@ export default class WheelPicker extends Plugin {
 
 				//animation of the wheel (remove, then add so that it spins properly)
 				svg.classList.remove("wheel__spin");
-				//needs this to separate removing and adding of wheel spin onto diff ticks
-				//this allows for re-spinning the wheel to occur properly
-				//might not be needed from my testing, but doesn't cost anything to keep
-				void svg.offsetWidth;
 				svg.classList.add("wheel__spin");
 
 				//wait for animation to finish, then continue processing
@@ -205,7 +200,7 @@ export default class WheelPicker extends Plugin {
 							rows[Math.floor(Math.random() * rows.length)];
 
 						//open modal with result
-						new WheelPickerModal(this.app, res).open();
+						new WheelPickerModal(this.app, res ?? "").open();
 
 						//allow button interaction since everything is done
 						spinbtn.disabled = false;
@@ -215,9 +210,11 @@ export default class WheelPicker extends Plugin {
 				);
 			});
 
-			this.registerDomEvent(svg, "animationend", () => {
+			const onAnimationEnd = () => {
 				svg.classList.remove("wheel__spin");
-			});
+			};
+			svg.addEventListener("animationend", onAnimationEnd);
+			this.animationEndListeners.set(svg, onAnimationEnd);
 		});
 
 		//PERF: Perhaps make this display how many items are in the wheel on the
