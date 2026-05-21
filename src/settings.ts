@@ -1,4 +1,4 @@
-import { type App, PluginSettingTab, Setting } from "obsidian";
+import { type App, PluginSettingTab, Setting, createFragment } from "obsidian";
 import type WheelPicker from "./main";
 import { ConfirmResetModal } from "./modal";
 
@@ -45,11 +45,9 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		new Setting(containerEl).setName("Wheel Settings").setHeading();
-
 		//animation time slider
 		new Setting(containerEl)
-			.setName("Spin Duration (seconds)")
+			.setName("Spin duration (seconds)")
 			.setDesc(
 				"Changes the length of time (seconds) the spin animation plays.",
 			)
@@ -66,7 +64,7 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 
 		//wheel size slider
 		new Setting(containerEl)
-			.setName("Wheel Size")
+			.setName("Wheel size")
 			.setDesc(
 				createFragment((frag) => {
 					frag.appendText(
@@ -89,7 +87,7 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 
 		//text size slider
 		new Setting(containerEl)
-			.setName("Text Size")
+			.setName("Text size")
 			.setDesc("Changes the text size of the items within the wheel.")
 			.addSlider((slider) =>
 				slider
@@ -158,7 +156,7 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 		//color sequence
 		new Setting(containerEl)
 			.setName("Slice color list")
-			.setDesc("Toggle 'On' to choose the colors used for the slices.")
+			.setDesc("Toggle 'on' to choose the colors used for the slices.")
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.useCustomColors)
@@ -180,7 +178,7 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 		if (this.plugin.settings.useCustomColors) {
 			this.plugin.settings.customColors.forEach((color, i) => {
 				new Setting(containerEl)
-					.setName(`Custom Color ${i + 1}`)
+					.setName(`Custom color ${i + 1}`)
 					.addColorPicker((cp) =>
 						cp.setValue(color).onChange(async (value) => {
 							this.plugin.settings.customColors[i] = value;
@@ -189,7 +187,7 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 					)
 					.addButton((btn) =>
 						btn
-							.setButtonText("Remove Color")
+							.setButtonText("Remove color")
 							.setWarning()
 							.onClick(async () => {
 								this.plugin.settings.customColors.splice(i, 1);
@@ -201,7 +199,7 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 
 			//add new color button
 			new Setting(containerEl).addButton((btn) =>
-				btn.setButtonText("Add New Color").onClick(async () => {
+				btn.setButtonText("Add new color").onClick(async () => {
 					this.plugin.settings.customColors.push("#ffffff");
 					await this.plugin.saveSettings();
 					this.display();
