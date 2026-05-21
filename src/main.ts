@@ -1,4 +1,4 @@
-import { type App, MarkdownView, Notice, Plugin, setIcon, type MarkdownView } from "obsidian";
+import { Plugin, setIcon, type MarkdownView } from "obsidian";
 import {
 	DEFAULT_SETTINGS,
 	WheelPickerSettings,
@@ -115,13 +115,18 @@ export default class WheelPicker extends Plugin {
 				//assign slice attributes
 				path.setAttribute(
 					"fill",
-					this.settings.customColors.length > 0 ? 
-					this.settings.customColors[i % this.settings.customColors.length]
-					//make the color white if there is none in customColors
-					: "#ffffff",
+					this.settings.customColors.length > 0
+						? this.settings.customColors[
+								i % this.settings.customColors.length
+							]
+						: //make the color white if there is none in customColors
+							"#ffffff",
 				);
 				path.setAttribute("stroke", this.settings.strokeColor);
-				path.setAttribute("stroke-width", `${this.settings.strokeWidth}`);
+				path.setAttribute(
+					"stroke-width",
+					`${this.settings.strokeWidth}`,
+				);
 				svg.appendChild(path);
 
 				//INFO: now we are going to add the text from the row
@@ -215,61 +220,15 @@ export default class WheelPicker extends Plugin {
 			});
 		});
 
-		// This creates an icon in the left ribbon.
-		this.addRibbonIcon(
-			"loader-pinwheel",
-			"Wheelpicker",
-			(evt: MouseEvent) => {
-				// Called when the user clicks the icon.
-				new Notice("This is a notice!");
-			},
-		);
-
 		//PERF: Perhaps make this display how many items are in the wheel on the
 		// current note?
 		// Adds a pinwheel icon
-		const item = this.addStatusBarItem();
-		setIcon(item, "loader-pinwheel");
+		//const item = this.addStatusBarItem();
+		//setIcon(item, "loader-pinwheel");
 
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
-		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText("X");
-
-		// This adds a simple command that can be triggered anywhere
-		this.addCommand({
-			id: "open-modal-simple",
-			name: "Open modal (simple)",
-			callback: () => {
-				new WheelPickerModal(this.app).open();
-			},
-		});
-		// This adds a complex command that can check whether the current state of the app allows execution of the command
-		this.addCommand({
-			id: "open-modal-complex",
-			name: "Open modal (complex)",
-			checkCallback: (checking: boolean) => {
-				// Conditions to check
-				const markdownView =
-					this.app.workspace.getActiveViewOfType(MarkdownView);
-				if (markdownView) {
-					// If checking is true, we're simply "checking" if the command can be run.
-					// If checking is false, then we want to actually perform the operation.
-					if (!checking) {
-						new WheelPickerModal(this.app).open();
-					}
-
-					// This command will only show up in Command Palette when the check function returns true
-					return true;
-				}
-				return false;
-			},
-		});
-
-		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
-		// Using this function will automatically remove the event listener when this plugin is disabled.
-		//this.registerDomEvent(document, "click", (evt: MouseEvent) => {
-		//	new Notice("Click");
-		//});
+		//const statusBarItemEl = this.addStatusBarItem();
+		//statusBarItemEl.setText("X");
 	}
 
 	onunload() {}
@@ -281,16 +240,9 @@ export default class WheelPicker extends Plugin {
 			(await this.loadData()) as Partial<WheelPickerSettings>,
 		);
 		//ensure customColors is always populated
-		this.settings.customColors = this.settings.customColors?.length ? [...this.settings.customColors] : [...DEFAULT_SETTINGS.customColors];
-		//this.settings.customColors = [
-		//	this.settings.customColors?.[0] ?? DEFAULT_SETTINGS.customColors[0],
-		//	this.settings.customColors?.[1] ?? DEFAULT_SETTINGS.customColors[1],
-		//	this.settings.customColors?.[2] ?? DEFAULT_SETTINGS.customColors[2],
-		//	this.settings.customColors?.[3] ?? DEFAULT_SETTINGS.customColors[3],
-		//	this.settings.customColors?.[4] ?? DEFAULT_SETTINGS.customColors[4],
-		//	this.settings.customColors?.[5] ?? DEFAULT_SETTINGS.customColors[5],
-		//	this.settings.customColors?.[6] ?? DEFAULT_SETTINGS.customColors[6],
-		//];
+		this.settings.customColors = this.settings.customColors?.length
+			? [...this.settings.customColors]
+			: [...DEFAULT_SETTINGS.customColors];
 	}
 
 	async saveSettings() {
@@ -299,7 +251,7 @@ export default class WheelPicker extends Plugin {
 		//re-render the active view
 		const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 		if (view) {
-			view.previewMode.rerender(true)
+			view.previewMode.rerender(true);
 		}
 	}
 }

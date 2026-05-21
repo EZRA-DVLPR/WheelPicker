@@ -2,10 +2,11 @@
 	"id": "wheel-picker",
 	"name": "Wheel Picker",
 	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
-	"description": "Generates a Wheel popup that will pick a random item from a given list",
+	"_comment_for_minAppVersion": "min app version is from the color.setValue property within Color Picker.",
+	"minAppVersion": "1.0.0",
+	"description": "Displays a wheel that when clicked, selects a random item from the list.",
 	"author": "EZRA-DVLPR",
 	"authorUrl": "https://github.com/EZRA-DVLPR",
 	"fundingUrl": "https://personal-website-ezra-dvlpr.vercel.app/tips",
-	"isDesktopOnly": true
+	"isDesktopOnly": false 
 }
