@@ -2,13 +2,13 @@ import { type App, PluginSettingTab, Setting } from "obsidian";
 import type WheelPicker from "./main";
 
 export interface WheelPickerSettings {
-	wheelSpin: boolean;
 	animationTime: number;
+	wheelSize: number;
 }
 
 export const DEFAULT_SETTINGS: WheelPickerSettings = {
-	wheelSpin: false,
 	animationTime: 3,
+	wheelSize: 500,
 };
 
 export class WheelPickerSettingTab extends PluginSettingTab {
@@ -23,9 +23,14 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
+		new Setting(containerEl).setName("Wheel Settings").setHeading();
+
 		//animation time slider
 		new Setting(containerEl)
 			.setName("Spin Duration (seconds)")
+			.setDesc(
+				"Changes the length of time (seconds) the spin animation plays.",
+			)
 			.addSlider((slider) =>
 				slider
 					.setLimits(0.5, 5, 0.5)
@@ -37,25 +42,30 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 					}),
 			);
 
+		//wheel size slider
 		new Setting(containerEl)
-			.setName("Wheel spin")
+			.setName("Wheel Size")
 			.setDesc(
-				"On means the wheel spins. Off means the wheel won't spin.",
+				createFragment((frag) => {
+					frag.appendText(
+						"Changes the size of the wheel (diameter) in pixels.",
+					);
+					frag.createEl("br");
+					frag.appendText("Disclaimer! This may require a restart!");
+				}),
 			)
-			.addToggle((toggle) =>
-				toggle
-					.setValue(this.plugin.settings.wheelSpin)
+			.addSlider((slider) =>
+				slider
+					.setLimits(200, 2000, 100)
+					.setValue(this.plugin.settings.wheelSize)
+					.setDynamicTooltip()
 					.onChange(async (value) => {
-						this.plugin.settings.wheelSpin = value;
+						this.plugin.settings.wheelSize = value;
 						await this.plugin.saveSettings();
-						this.display();
 					}),
 			);
 
 		//TODO: settings options:
-		//
-		//circle size slider
-		//
 		//color sequence array
 		//
 		//text size slider

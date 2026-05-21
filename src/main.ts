@@ -1,4 +1,4 @@
-import { type App, MarkdownView, Notice, Plugin, setIcon } from "obsidian";
+import { type App, MarkdownView, Notice, Plugin, setIcon, type MarkdownView } from "obsidian";
 import {
 	DEFAULT_SETTINGS,
 	WheelPickerSettings,
@@ -50,9 +50,7 @@ export default class WheelPicker extends Plugin {
 			//TODO: handle case where there is only 1 row
 			//i.e. just make a circle with the central text being the row data
 
-			//TODO: setting
-			//wheel size
-			const size = 500;
+			const size = this.settings.wheelSize;
 			const r = size / 2;
 			const cx = r;
 			const cy = r;
@@ -310,5 +308,11 @@ export default class WheelPicker extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+
+		//re-render the active view
+		const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+		if (view) {
+			view.previewMode.rerender(true)
+		}
 	}
 }
