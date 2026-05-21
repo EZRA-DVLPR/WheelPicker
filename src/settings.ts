@@ -14,7 +14,7 @@ export const DEFAULT_SETTINGS: WheelPickerSettings = {
 	animationTime: 3,
 	wheelSize: 500,
 	fontSize: 25,
-	strokeColor: "#FFFFFF",
+	strokeColor: "#ffffff",
 	strokeWidth: 2,
 };
 
@@ -92,10 +92,12 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 			.setName("Outline color for lines and curves")
 			.setDesc("Choose the color to show the separation between slices.")
 			.addColorPicker((color) =>
-				color.setValue("#FFFFFF").onChange(async (value) => {
-					this.plugin.settings.strokeColor = value;
-					await this.plugin.saveSettings();
-				}),
+				color
+					.setValue(this.plugin.settings.strokeColor)
+					.onChange(async (value) => {
+						this.plugin.settings.strokeColor = value;
+						await this.plugin.saveSettings();
+					}),
 			);
 
 		//slice stroke width
