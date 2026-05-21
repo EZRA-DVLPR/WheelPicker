@@ -281,6 +281,11 @@ export default class WheelPicker extends Plugin {
 		this.settings.customColors = [
 			this.settings.customColors?.[0] ?? DEFAULT_SETTINGS.customColors[0],
 			this.settings.customColors?.[1] ?? DEFAULT_SETTINGS.customColors[1],
+			this.settings.customColors?.[2] ?? DEFAULT_SETTINGS.customColors[2],
+			this.settings.customColors?.[3] ?? DEFAULT_SETTINGS.customColors[3],
+			this.settings.customColors?.[4] ?? DEFAULT_SETTINGS.customColors[4],
+			this.settings.customColors?.[5] ?? DEFAULT_SETTINGS.customColors[5],
+			this.settings.customColors?.[6] ?? DEFAULT_SETTINGS.customColors[6],
 		];
 	}
 

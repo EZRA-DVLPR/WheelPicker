@@ -10,9 +10,8 @@ export interface WheelPickerSettings {
 	strokeWidth: number;
 	textColor: string;
 	useCustomColors: boolean;
-	customColors: [string, string];
-	customColor1: string;
-	customColor2: string;
+	customColors: [string, string, string, string, string, string, string];
+	//customColors: string[];
 }
 
 export const DEFAULT_SETTINGS: WheelPickerSettings = {
@@ -23,9 +22,15 @@ export const DEFAULT_SETTINGS: WheelPickerSettings = {
 	strokeWidth: 2,
 	textColor: "#ffffff",
 	useCustomColors: false,
-	customColors: ["#de0000", "#fe622c"],
-	customColor1: "#de0000",
-	customColor2: "#fe622c",
+	customColors: [
+		"#de0000",
+		"#fe622c",
+		"#fef600",
+		"#00bc00",
+		"#009cfe",
+		"#000084",
+		"#2C009C",
+	],
 };
 
 export class WheelPickerSettingTab extends PluginSettingTab {
@@ -171,32 +176,46 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 					}),
 			);
 
+		//display the customColors
 		if (this.plugin.settings.useCustomColors) {
-			//custom color 1
-			new Setting(containerEl)
-				.setName("Custom Color 1")
-				.setDesc("The color of the first slice.")
-				.addColorPicker((color) => {
-					color
-						.setValue(this.plugin.settings.customColors[0])
-						.onChange(async (value) => {
-							this.plugin.settings.customColors[0] = value;
+			this.plugin.settings.customColors.forEach((color, i) => {
+				new Setting(containerEl)
+					.setName(`Custom Color ${i + 1}`)
+					.addColorPicker((cp) =>
+						cp.setValue(color).onChange(async (value) => {
+							this.plugin.settings.customColors[i] = value;
 							await this.plugin.saveSettings();
-						});
-				});
-			//custom color 2
-			new Setting(containerEl)
-				.setName("Custom Color 2")
-				.setDesc("The color of the second slice.")
-				.addColorPicker((color) => {
-					color
-						.setValue(this.plugin.settings.customColors[1])
-						.onChange(async (value) => {
-							this.plugin.settings.customColors[1] = value;
-							await this.plugin.saveSettings();
-						});
-				});
+						}),
+					);
+			});
 		}
+
+		//
+		//
+		//	new Setting(containerEl)
+		//		.setName("Custom Color 1")
+		//		.setDesc("The color of the first slice.")
+		//		.addColorPicker((color) => {
+		//			color
+		//				.setValue(this.plugin.settings.customColors[0])
+		//				.onChange(async (value) => {
+		//					this.plugin.settings.customColors[0] = value;
+		//					await this.plugin.saveSettings();
+		//				});
+		//		});
+		//	//custom color 2
+		//	new Setting(containerEl)
+		//		.setName("Custom Color 2")
+		//		.setDesc("The color of the second slice.")
+		//		.addColorPicker((color) => {
+		//			color
+		//				.setValue(this.plugin.settings.customColors[1])
+		//				.onChange(async (value) => {
+		//					this.plugin.settings.customColors[1] = value;
+		//					await this.plugin.saveSettings();
+		//				});
+		//		});
+		//}
 
 		//TODO: settings options:
 		//add history button
