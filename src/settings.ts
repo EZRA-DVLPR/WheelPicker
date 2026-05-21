@@ -5,11 +5,15 @@ import { ConfirmResetModal } from "./modal";
 export interface WheelPickerSettings {
 	animationTime: number;
 	wheelSize: number;
+	fontSize: number;
+	strokeColor: string;
 }
 
 export const DEFAULT_SETTINGS: WheelPickerSettings = {
 	animationTime: 3,
 	wheelSize: 500,
+	fontSize: 25,
+	strokeColor: "#FFFFFF",
 };
 
 export class WheelPickerSettingTab extends PluginSettingTab {
@@ -66,26 +70,41 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 					}),
 			);
 
+		//text size slider
+		new Setting(containerEl)
+			.setName("Text Size")
+			.setDesc("Changes the text size of the items within the wheel.")
+			.addSlider((slider) =>
+				slider
+					.setLimits(20, 120, 5)
+					.setValue(this.plugin.settings.fontSize)
+					.setDynamicTooltip()
+					.onChange(async (value) => {
+						this.plugin.settings.fontSize = value;
+						await this.plugin.saveSettings();
+					}),
+			);
+
+		new Setting(containerEl)
+			.setName("Slice Outline Color")
+			.setDesc("Choose the color to show the separation between slices.")
+			.addColorPicker((color) =>
+				color.setValue("#FFFFFF").onChange(async (value) => {
+					this.plugin.settings.strokeColor = value;
+					await this.plugin.saveSettings();
+				}),
+			);
+
 		//TODO: settings options:
 		//color sequence array
 		//
-		//text size slider
-		//
-		//toggle ordering cw (default) or ccw
-		//
-		//perhaps an option to change whether the first line separation for the first slice is at 12 or 3
-		//
-		//separation color between slices (text enter)
-		//
-		//separation stroke width
-		//
 		//text color (text enter)
 		//
-		//text size (slider)
+		//separation stroke width - 0 (no line width) to some upper bound
 		//
-		//text font (text enter)
+		//add history button
 		//
-		//length of history for generated things
+		//length of history for generated things (5 and upper bound)
 
 		new Setting(containerEl)
 			.setName("Reset to defaults")

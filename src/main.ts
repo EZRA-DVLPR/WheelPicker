@@ -27,6 +27,7 @@ export default class WheelPicker extends Plugin {
 			const rows = source.split("\n").filter((row) => row.length > 0);
 
 			if (rows.length === 0) {
+				//you have no slices :(
 				return;
 			}
 
@@ -43,6 +44,7 @@ export default class WheelPicker extends Plugin {
 			//remove the first row since its just the title
 			rows.shift();
 
+			//PERF: remove if length is 1 at start
 			if (rows.length === 0) {
 				return;
 			}
@@ -75,7 +77,6 @@ export default class WheelPicker extends Plugin {
 			//WARN: this is based on a future defined var (stroke width)
 			//will eventually be fixed when it becomes a setting
 			const pad = 2;
-			//svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
 			svg.setAttribute(
 				"viewBox",
 				`${-pad} ${-pad} ${size + pad * 2} ${size + pad * 2}`,
@@ -130,9 +131,7 @@ export default class WheelPicker extends Plugin {
 					"fill",
 					rainbow[i % rainbow.length] ?? "#535553",
 				);
-				//TODO: setting
-				//separation color
-				path.setAttribute("stroke", "#ffffff");
+				path.setAttribute("stroke", this.settings.strokeColor);
 				//TODO: setting
 				//separation stroke width
 				path.setAttribute("stroke-width", "2");
@@ -164,12 +163,7 @@ export default class WheelPicker extends Plugin {
 				//text color
 				//assign the text attributes
 				text.setAttribute("fill", "#fff");
-				//TODO: setting
-				//font size
-				text.setAttribute("font-size", "25");
-				//TODO: setting
-				//font style
-				text.setAttribute("font-family", "sans-serif");
+				text.setAttribute("font-size", `${this.settings.fontSize}`);
 
 				//display angle for text so that it follows the center of the angle
 				text.setAttribute(
@@ -285,9 +279,6 @@ export default class WheelPicker extends Plugin {
 				return false;
 			},
 		});
-
-		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new WheelPickerSettingTab(this.app, this));
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
