@@ -9,6 +9,10 @@ export interface WheelPickerSettings {
 	strokeColor: string;
 	strokeWidth: number;
 	textColor: string;
+	useCustomColors: boolean;
+	customColors: [string, string];
+	customColor1: string;
+	customColor2: string;
 }
 
 export const DEFAULT_SETTINGS: WheelPickerSettings = {
@@ -18,6 +22,10 @@ export const DEFAULT_SETTINGS: WheelPickerSettings = {
 	strokeColor: "#ffffff",
 	strokeWidth: 2,
 	textColor: "#ffffff",
+	useCustomColors: false,
+	customColors: ["#de0000", "#fe622c"],
+	customColor1: "#de0000",
+	customColor2: "#fe622c",
 };
 
 export class WheelPickerSettingTab extends PluginSettingTab {
@@ -142,9 +150,55 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 					}),
 			);
 
+		//color sequence
+		new Setting(containerEl)
+			.setName("Slice color list")
+			.setDesc("Toggle 'On' to choose the colors used for the slices.")
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.useCustomColors)
+					.onChange(async (value) => {
+						this.plugin.settings.useCustomColors = value;
+						//if in the "off" position reset all colors to default
+						if (!value) {
+							//deep copy customColors
+							this.plugin.settings.customColors = [
+								...DEFAULT_SETTINGS.customColors,
+							];
+						}
+						await this.plugin.saveSettings();
+						this.display();
+					}),
+			);
+
+		if (this.plugin.settings.useCustomColors) {
+			//custom color 1
+			new Setting(containerEl)
+				.setName("Custom Color 1")
+				.setDesc("The color of the first slice.")
+				.addColorPicker((color) => {
+					color
+						.setValue(this.plugin.settings.customColors[0])
+						.onChange(async (value) => {
+							this.plugin.settings.customColors[0] = value;
+							await this.plugin.saveSettings();
+						});
+				});
+			//custom color 2
+			new Setting(containerEl)
+				.setName("Custom Color 2")
+				.setDesc("The color of the second slice.")
+				.addColorPicker((color) => {
+					color
+						.setValue(this.plugin.settings.customColors[1])
+						.onChange(async (value) => {
+							this.plugin.settings.customColors[1] = value;
+							await this.plugin.saveSettings();
+						});
+				});
+		}
+
 		//TODO: settings options:
-		//color sequence array
-		//
 		//add history button
 		//
 		//length of history for generated things (5 and upper bound)
@@ -158,10 +212,13 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 					.setWarning()
 					.onClick(() => {
 						new ConfirmResetModal(this.app, async () => {
-							this.plugin.settings = Object.assign(
-								{},
-								DEFAULT_SETTINGS,
-							);
+							//deep copy customColors
+							this.plugin.settings = {
+								...DEFAULT_SETTINGS,
+								customColors: [
+									...DEFAULT_SETTINGS.customColors,
+								],
+							};
 							await this.plugin.saveSettings();
 							//re-renders the settings tab
 							this.display();

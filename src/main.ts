@@ -60,17 +60,6 @@ export default class WheelPicker extends Plugin {
 			//angle of each row slice
 			const slice = (2 * Math.PI) / n;
 
-			//TODO: setting
-			//color sequence
-			const rainbow = [
-				"#e74c3c",
-				"#e67e22",
-				"#f1c40f",
-				"#2ecc71",
-				"#3498db",
-				"#9b59b6",
-			];
-
 			//declare svg then set sizing for wheel viewbox
 			const NS = "http://www.w3.org/2000/svg";
 			const svg = document.createElementNS(NS, "svg");
@@ -124,10 +113,9 @@ export default class WheelPicker extends Plugin {
 					Z`,
 				);
 				//assign slice attributes
-				//PERF: based on rainbow which will be a color setting in the future
 				path.setAttribute(
 					"fill",
-					rainbow[i % rainbow.length] ?? "#535553",
+					`${this.settings.customColors[i % this.settings.customColors.length]}`,
 				);
 				path.setAttribute("stroke", this.settings.strokeColor);
 				path.setAttribute("stroke-width", `${this.settings.strokeWidth}`);
@@ -289,6 +277,11 @@ export default class WheelPicker extends Plugin {
 			DEFAULT_SETTINGS,
 			(await this.loadData()) as Partial<WheelPickerSettings>,
 		);
+		//ensure customColors is always populated
+		this.settings.customColors = [
+			this.settings.customColors?.[0] ?? DEFAULT_SETTINGS.customColors[0],
+			this.settings.customColors?.[1] ?? DEFAULT_SETTINGS.customColors[1],
+		];
 	}
 
 	async saveSettings() {
