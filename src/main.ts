@@ -5,7 +5,7 @@ import {
 	WheelPickerSettingTab,
 } from "./settings";
 
-import WheelPickerModal from "./modal";
+import { WheelPickerModal } from "./modal";
 
 export default class WheelPicker extends Plugin {
 	settings: WheelPickerSettings;

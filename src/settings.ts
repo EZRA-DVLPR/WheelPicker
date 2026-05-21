@@ -1,5 +1,6 @@
 import { type App, PluginSettingTab, Setting } from "obsidian";
 import type WheelPicker from "./main";
+import { ConfirmResetModal } from "./modal";
 
 export interface WheelPickerSettings {
 	animationTime: number;
@@ -85,5 +86,25 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 		//text font (text enter)
 		//
 		//length of history for generated things
+
+		new Setting(containerEl)
+			.setName("Reset to defaults")
+			.setDesc("Reset all settings back to their default values.")
+			.addButton((btn) =>
+				btn
+					.setButtonText("Reset")
+					.setWarning()
+					.onClick(() => {
+						new ConfirmResetModal(this.app, async () => {
+							this.plugin.settings = Object.assign(
+								{},
+								DEFAULT_SETTINGS,
+							);
+							await this.plugin.saveSettings();
+							//re-renders the settings tab
+							this.display();
+						}).open();
+					}),
+			);
 	}
 }
