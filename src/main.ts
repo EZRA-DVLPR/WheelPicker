@@ -38,7 +38,7 @@ export default class WheelPicker extends Plugin {
 			// extracts the title from the first line (row)
 			// eg: -My Wheel Title- --> My Wheel Title (as H2 title)
 			const headertitle = rows[0]?.split("-")[1];
-			const title = wheel.createEl("h2", {
+			wheel.createEl("h2", {
 				text: headertitle ?? "My Wheel",
 			});
 

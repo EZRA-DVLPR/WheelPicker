@@ -14,9 +14,9 @@ export class WheelPickerModal extends Modal {
 //used to confirm reset of defaults in settings
 export class ConfirmResetModal extends Modal {
 	//handled in settings
-	onConfirm: () => void;
+	onConfirm: () => Promise<void>;
 
-	constructor(app: App, onConfirm: () => void) {
+	constructor(app: App, onConfirm: () => Promise<void>) {
 		super(app);
 		this.onConfirm = onConfirm;
 	}
@@ -35,8 +35,8 @@ export class ConfirmResetModal extends Modal {
 				btn
 					.setButtonText("Confirm")
 					.setWarning()
-					.onClick(() => {
-						this.onConfirm();
+					.onClick(async () => {
+						await this.onConfirm();
 						this.close();
 					}),
 			)
