@@ -1,4 +1,4 @@
-import { type App, PluginSettingTab, Setting, createFragment } from "obsidian";
+import { type App, PluginSettingTab, Setting } from "obsidian";
 import type WheelPicker from "./main";
 import { ConfirmResetModal } from "./modal";
 
@@ -62,18 +62,18 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 					}),
 			);
 
+		//desc for wheel size
+		const wheelSizeFrag = document.createDocumentFragment();
+		wheelSizeFrag.appendText(
+			"Changes the size of the wheel (diameter) in pixels.",
+		);
+		wheelSizeFrag.createEl("br");
+		wheelSizeFrag.appendText("Disclaimer: This may require a restart!");
+
 		//wheel size slider
 		new Setting(containerEl)
 			.setName("Wheel size")
-			.setDesc(
-				createFragment((frag) => {
-					frag.appendText(
-						"Changes the size of the wheel (diameter) in pixels.",
-					);
-					frag.createEl("br");
-					frag.appendText("Disclaimer: This may require a restart!");
-				}),
-			)
+			.setDesc(wheelSizeFrag)
 			.addSlider((slider) =>
 				slider
 					.setLimits(200, 2000, 100)
@@ -113,20 +113,20 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 					}),
 			);
 
+		//desc slice stroke width
+		const sliceStrokeWidthFrag = document.createDocumentFragment();
+		sliceStrokeWidthFrag.appendText(
+			"Changes the thickness of each separating line or arc.",
+		);
+		sliceStrokeWidthFrag.createEl("br");
+		sliceStrokeWidthFrag.appendText(
+			"Note: 0 thickness means there is no outline/border between slices",
+		);
+
 		//slice stroke width
 		new Setting(containerEl)
 			.setName("Width of outline lines and curves")
-			.setDesc(
-				createFragment((frag) => {
-					frag.appendText(
-						"Changes the thickness of each separating line or arc.",
-					);
-					frag.createEl("br");
-					frag.appendText(
-						"Note: 0 thickness means there is no outline/border between slices",
-					);
-				}),
-			)
+			.setDesc(sliceStrokeWidthFrag)
 			.addSlider((slider) =>
 				slider
 					.setLimits(0, 20, 1)
