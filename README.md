@@ -2,7 +2,8 @@
 
 ## What is it?
 
-Wheel Picker is an obsidian plugin to help visualize and select from lists in a fun way.
+Wheel Picker is an obsidian plugin to help visualize and select from an item from a list in a fun way.
+It is intended to be used in 'View' mode, but works just fine in 'Edit' mode.
 
 ## How do I use it?
 
@@ -73,28 +74,27 @@ Yellow
 
 5) Spin the wheel
 
-The wheel now has all the data need to be displayed.
+The wheel now has all the data needed to be displayed properly.
 It should look like this:
 
 ![Wheel that we just created](Sample.png)
 
-Now to spin it, tap/click the central button saying "Spin!"
+To spin it, tap/click the central button saying "Spin!"
 The wheel will now spin, and select an element at random from the wheel.
 
 ![Spinning the wheel (same as the demo)](Demo.gif)
 
 # FAQ
 
-- My Wheel isn't displaying anything!
-
-> While a wheel may not have a title...
-> Every wheel must have at least 2 rows of data.
+**Q: My wheel isn't displaying anything!**
+> A: While a wheel does not need a title, it must have at least 2 rows of data.
 > Make sure that you are putting each row of data onto its own line within the codeblock.
+> See the above example for clarity.
 
-- My wheel doesn't look good! Can I change X?
-
-> Absolutely!
-> In the settings of the plugin, you should be able to customize the colors, sizes, and more of just about any part of this plugin.
+**Q: My wheel doesn't look good! >:( Can I change it?!**
+> A: Absolutely! Locate the plugin specific settings found within Obsidian.
+> Then you can change just about any cosmetic feature including colors, animation length, wheel size, and more!
+> I encourage you to customize to your hearts content.
 
 # How to Install
 
@@ -110,9 +110,9 @@ This plugin is made by me, for free to anyone and everyone.
 Any donations and tips are graciously accepted.
 
 > [!Note]
-> That the following link takes you to my personal website.
+> The following link takes you to my personal website.
 
-[Link to my website's tip page](https://personal-website-ezra-dvlpr.vercel.app/tips)
+[Link to the tip page on my website](https://personal-website-ezra-dvlpr.vercel.app/tips)
 
 Thank you very much if you donate!
 
