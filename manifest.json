@@ -1,8 +1,7 @@
 {
 	"id": "wheel-picker",
 	"name": "Wheel Picker",
-	"version": "1.0.1",
-	"_comment_for_minAppVersion": "min app version is from the color.setValue property within Color Picker.",
+	"version": "1.0.0",
 	"minAppVersion": "1.0.0",
 	"description": "Displays a wheel that when clicked, selects a random item from the wheel.",
 	"author": "EZRA-DVLPR",
