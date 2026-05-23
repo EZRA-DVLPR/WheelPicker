@@ -31,7 +31,7 @@ export default class WheelPicker extends Plugin {
 			//you have no slices :(
 			if (rows.length <= 2) {
 				el.createEl("h2", {
-					text: "Not Enough Wheel Data -- See Documentation",
+					text: "Not enough wheel data -- See documentation",
 				});
 				return;
 			}
@@ -47,7 +47,7 @@ export default class WheelPicker extends Plugin {
 
 				//headertitle was found though it may be empty
 				wheel.createEl("h2", {
-					text: headertitle ?? "My Wheel",
+					text: headertitle ?? "My wheel",
 				});
 
 				//remove the first row since its just the title
@@ -55,7 +55,7 @@ export default class WheelPicker extends Plugin {
 			} else {
 				//no title provided, so just say "My Wheel"
 				wheel.createEl("h2", {
-					text: "My Wheel",
+					text: "My wheel",
 				});
 			}
 
