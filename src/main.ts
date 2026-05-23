@@ -40,7 +40,7 @@ export default class WheelPicker extends Plugin {
 			const wheel = el.createEl("div", { cls: "wheel__container" });
 
 			// extracts the title from the first line (row) if it exists
-			if (rows[0].includes("-")) {
+			if (rows[0]?.includes("-")) {
 				//extracts the title
 				//eg: -My Wheel Title- --> My Wheel Title (as H2 title)
 				const headertitle = rows[0]?.split("-")[1];
