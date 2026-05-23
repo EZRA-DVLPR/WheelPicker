@@ -12,15 +12,15 @@ Wheel Picker is an obsidian plugin to help visualize and select from lists in a 
 
 ### Sample Wheel Picker codeblock
 
-```
-\`\`\`wp
+````
+```wp
 -What should I eat for dinner?-
 Sushi
 Burger
 Pizza
 Tacos
-\`\`\`
 ```
+````
 
 ### How do I create my own wheel?
 
