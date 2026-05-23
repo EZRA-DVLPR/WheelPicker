@@ -9,12 +9,39 @@ import { WheelPickerModal } from "./modal";
 
 export default class WheelPicker extends Plugin {
 	settings: WheelPickerSettings;
+
 	//used to catch and end the animation listener automagically
 	private animationEndListeners = new WeakMap<SVGSVGElement, () => void>();
+
+	//used to count how many total wheels there are per page - <page, #>
+	private wheelCounts = new Map<string, number>();
+
+	//used to updated statusbar - {# Icon}
+	private statusBarWheels = this.addStatusBarItem();
+	private statusBarWheelsText: HTMLElement;
 
 	async onload() {
 		await this.loadSettings();
 		this.addSettingTab(new WheelPickerSettingTab(this.app, this));
+
+		//Adds text to indicate the # of wheels in current note
+		this.statusBarWheelText = this.statusBarWheels.createEl("span", {
+			text: " 0 wheels",
+		});
+
+		//adds a little space between the text and icon
+		this.statusBarWheels.createEl("span", { text: "\u00A0" });
+
+		//adds pinwheel icon
+		const iconEl = this.statusBarWheels.createEl("span");
+		setIcon(iconEl, "loader-pinwheel");
+
+		//update status bar when switching notes
+		this.registerEvent(
+			this.app.workspace.on("active-leaf-change", () => {
+				this.updateStatusBar();
+			}),
+		);
 
 		// reads the markdown and displays its contents
 		// eg.
@@ -35,6 +62,11 @@ export default class WheelPicker extends Plugin {
 				});
 				return;
 			}
+
+			//adjust wheelCounts per note and then update status bar
+			const file = ctx.sourcePath;
+			this.wheelCounts.set(file, (this.wheelCounts.get(file) ?? 0) + 1);
+			this.updateStatusBar();
 
 			//create wheel div
 			const wheel = el.createEl("div", { cls: "wheel__container" });
@@ -225,15 +257,6 @@ export default class WheelPicker extends Plugin {
 			svg.addEventListener("animationend", onAnimationEnd);
 			this.animationEndListeners.set(svg, onAnimationEnd);
 		});
-
-		//PERF: Perhaps make this display how many items are in the wheel on the
-		// current note?
-		// Adds a pinwheel icon
-		//const item = this.addStatusBarItem();
-		//setIcon(item, "loader-pinwheel");
-		// adds text which would be changed to a number to indicate the # of wheels
-		//const statusBarItemEl = this.addStatusBarItem();
-		//statusBarItemEl.setText("X");
 	}
 
 	onunload() {}
@@ -258,5 +281,12 @@ export default class WheelPicker extends Plugin {
 		if (view) {
 			view.previewMode.rerender(true);
 		}
+	}
+
+	//based on the current file, displays the amount of wheels in the status bar
+	private updateStatusBar() {
+		const file = this.app.workspace.getActiveFile();
+		const count = file ? (this.wheelCounts.get(file.path) ?? 0) : 0;
+		this.statusBarWheelText.setText(` ${count} `);
 	}
 }
