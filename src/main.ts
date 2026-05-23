@@ -31,7 +31,7 @@ export default class WheelPicker extends Plugin {
 			//you have no slices :(
 			if (rows.length <= 2) {
 				el.createEl("h2", {
-					text: "Not enough wheel data -- See documentation",
+					text: "Not enough wheel data -- see documentation",
 				});
 				return;
 			}

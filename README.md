@@ -13,13 +13,13 @@ Wheel Picker is an obsidian plugin to help visualize and select from lists in a 
 ### Sample Wheel Picker codeblock
 
 ```
-'''wp
+\`\`\`wp
 -What should I eat for dinner?-
 Sushi
 Burger
 Pizza
 Tacos
-'''
+\`\`\`
 ```
 
 ### How do I create my own wheel?
@@ -29,8 +29,10 @@ Tacos
 To create a codeblock, create a triplet of the ` character. On the next line, do the same.
 You should now see an empty codeblock.
 
->   \`\`\`
->   \`\`\`
+```
+\`\`\`
+\`\`\`
+```
 
 2) Connect with Wheel Picker
 
