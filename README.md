@@ -24,45 +24,45 @@ Tacos
 
 ### How do I create my own wheel?
 
-1) Step 1: Empty Codeblock
+1) Empty Codeblock
 
 To create a codeblock, create a triplet of the ` character. On the next line, do the same.
 You should now see an empty codeblock.
 
->```
->```
+>\`\`\`
+>\`\`\`
 
-2) Step 2: Connect with Wheel Picker
+2) Connect with Wheel Picker
 
 At the end of the first row, add `wp`.
 This lets the plugin know that it's is going to read this codeblock.
 
->```wp
->```
+>\`\`\`\w\p
+>\`\`\`
 
-3) Step 3: Add a Title
+3) Add a Title
 
 At the end of the first row, hit enter to make a new line.
 Write a double hyphen (aka minus sign or dash) `--`.
 Within this double hyphen create a title.
 
->```wp
+>\`\`\`wp
 >-The colors of the rainbow-
->```
+>\`\`\`
 
-4) Step 4: Add some data
+4) Add some data
 
 This is where you will be adding actual data to the wheel itself.
 Every row will indicate a new slice on the wheel.
 Let's add 3 new rows for the first three colors of the rainbow.
 
->```wp
+>\`\`\`wp
 >Red
 >Orange
 >Yellow
->```
+>\`\`\`
 
-5) Step 5: Spin the wheel
+5) Spin the wheel
 
 The wheel now has all the data need to be displayed.
 It should look like this:
