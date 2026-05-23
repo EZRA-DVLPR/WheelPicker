@@ -4,7 +4,7 @@
 	"version": "1.0.0",
 	"_comment_for_minAppVersion": "min app version is from the color.setValue property within Color Picker.",
 	"minAppVersion": "1.0.0",
-	"description": "Displays a wheel that when clicked, selects a random item from the list.",
+	"description": "Displays a wheel that when clicked, selects a random item from the wheel.",
 	"author": "EZRA-DVLPR",
 	"authorUrl": "https://github.com/EZRA-DVLPR",
 	"fundingUrl": "https://personal-website-ezra-dvlpr.vercel.app/tips",

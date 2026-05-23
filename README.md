@@ -1,78 +1,114 @@
-# Wheel Picker Obsidian Plugin
+# Wheel Picker -- Obsidian Plugin
 
 ## What is it?
 
-This plugin is designed to randomly select an item from a list.
+Wheel Picker is an obsidian plugin to help visualize and select from lists in a fun way.
 
-## How to use it?
+## How do I use it?
 
+### Live Demo
+
+insert da gif here
+
+### Sample Wheel Picker codeblock
+
+```
+'''wp
+-What should I eat for dinner?-
+Sushi
+Burger
+Pizza
+Tacos
 '''
->Insert Code Here
-'''
+```
 
-# Obsidian Sample Plugin -- This is for me!
+### How do I create my own wheel?
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+1) Step 1: Empty Codeblock
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+To create a codeblock, create a triplet of the ` character. On the next line, do the same.
+You should now see an empty codeblock.
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open modal (simple)" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+>```
+>```
 
-## First time developing plugins?
+2) Step 2: Connect with Wheel Picker
 
-Quick starting guide for new plugin devs:
+At the end of the first row, add `wp`.
+This lets the plugin know that it's is going to read this codeblock.
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+>```wp
+>```
 
-## Releasing new releases
+3) Step 3: Add a Title
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+At the end of the first row, hit enter to make a new line.
+Write a double hyphen (aka minus sign or dash) `--`.
+Within this double hyphen create a title.
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+>```wp
+>-The colors of the rainbow-
+>```
 
-## Adding your plugin to the community plugin list
+4) Step 4: Add some data
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+This is where you will be adding actual data to the wheel itself.
+Every row will indicate a new slice on the wheel.
+Let's add 3 new rows for the first three colors of the rainbow.
 
-## How to use
+>```wp
+>Red
+>Orange
+>Yellow
+>```
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+5) Step 5: Spin the wheel
 
-## Manually installing the plugin
+The wheel now has all the data need to be displayed.
+It should look like this:
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+insert img here.
 
-## Improve code quality with eslint
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- This project already has eslint preconfigured, you can invoke a check by running`npm run lint`
-- Together with a custom eslint [plugin](https://github.com/obsidianmd/eslint-plugin) for Obsidan specific code guidelines.
-- A GitHub action is preconfigured to automatically lint every commit on all branches.
+Now to spin it, tap/click the central button saying "Spin!"
+The wheel will now spin, and select an element at random from the wheel.
 
-## API Documentation
+insert gif here.
 
-See https://docs.obsidian.md
+# FAQ
+
+- My Wheel isn't displaying anything!
+
+> While a wheel may not have a title...
+> Every wheel must have at least 2 rows of data.
+> Make sure that you are putting each row of data onto its own line within the codeblock.
+
+- My wheel doesn't look good! Can I change X?
+
+> Absolutely!
+> In the settings of the plugin, you should be able to customize the colors, sizes, and more of just about any part of this plugin.
+
+# How to Install
+
+The suggested way to install this plugin is via the list of obsidian community plugins
+
+1) Make sure that you have `Third-party plugins` enabled and `Safe Mode` is turned off.
+2) Browse the community plugins for `Wheel Picker`.
+3) Install, close the window, then active the freshly installed `Wheel Picker` plugin.
+
+# Tips/Donations
+
+This plugin is made by me, for free to anyone and everyone.
+Any donations and tips are graciously accepted.
+
+> [!Note]
+> That the following link takes you to my personal website.
+
+[Link to my website's tip page](https://personal-website-ezra-dvlpr.vercel.app/tips)
+
+Thank you very much if you donate!
+
+# Suggestions
+
+If you have any suggestions or encounter any bugs/have bug-fixes please feel free to email me at:
+
+> EZRA-DVLPR@protonmail.com
