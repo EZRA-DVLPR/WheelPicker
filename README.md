@@ -8,7 +8,7 @@ Wheel Picker is an obsidian plugin to help visualize and select from lists in a 
 
 ### Live Demo
 
-insert da gif here
+![Demo of Plugin](Demo.gif)
 
 ### Sample Wheel Picker codeblock
 
@@ -67,12 +67,12 @@ Let's add 3 new rows for the first three colors of the rainbow.
 The wheel now has all the data need to be displayed.
 It should look like this:
 
-insert img here.
+![Wheel that we just created](Sample.png)
 
 Now to spin it, tap/click the central button saying "Spin!"
 The wheel will now spin, and select an element at random from the wheel.
 
-insert gif here.
+![Spinning the wheel (same as the demo)](Demo.gif)
 
 # FAQ
 
@@ -93,7 +93,7 @@ The suggested way to install this plugin is via the list of obsidian community p
 
 1) Make sure that you have `Third-party plugins` enabled and `Safe Mode` is turned off.
 2) Browse the community plugins for `Wheel Picker`.
-3) Install, close the window, then active the freshly installed `Wheel Picker` plugin.
+3) Install the plugin, close the window, then activate the freshly installed `Wheel Picker` plugin.
 
 # Tips/Donations
 
