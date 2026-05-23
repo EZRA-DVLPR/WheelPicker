@@ -9,6 +9,7 @@ import { WheelPickerModal } from "./modal";
 
 export default class WheelPicker extends Plugin {
 	settings: WheelPickerSettings;
+	//used to catch and end the animation listener automagically
 	private animationEndListeners = new WeakMap<SVGSVGElement, () => void>();
 
 	async onload() {
@@ -27,34 +28,42 @@ export default class WheelPicker extends Plugin {
 			//grabs all non-empty rows from source text
 			const rows = source.split("\n").filter((row) => row.length > 0);
 
-			if (rows.length === 0) {
-				//you have no slices :(
+			//you have no slices :(
+			if (rows.length <= 2) {
+				el.createEl("h2", {
+					text: "Not Enough Wheel Data -- See Documentation",
+				});
 				return;
 			}
 
 			//create wheel div
 			const wheel = el.createEl("div", { cls: "wheel__container" });
 
-			// extracts the title from the first line (row)
-			// eg: -My Wheel Title- --> My Wheel Title (as H2 title)
-			const headertitle = rows[0]?.split("-")[1];
-			wheel.createEl("h2", {
-				text: headertitle ?? "My Wheel",
-			});
+			// extracts the title from the first line (row) if it exists
+			if (rows[0].includes("-")) {
+				//extracts the title
+				//eg: -My Wheel Title- --> My Wheel Title (as H2 title)
+				const headertitle = rows[0]?.split("-")[1];
 
-			//remove the first row since its just the title
-			rows.shift();
+				//headertitle was found though it may be empty
+				wheel.createEl("h2", {
+					text: headertitle ?? "My Wheel",
+				});
 
-			//PERF: remove if length is 1 at start
-			if (rows.length === 0) {
-				return;
+				//remove the first row since its just the title
+				rows.shift();
+			} else {
+				//no title provided, so just say "My Wheel"
+				wheel.createEl("h2", {
+					text: "My Wheel",
+				});
 			}
 
-			//TODO: handle case where there is only 1 row
-			//i.e. just make a circle with the central text being the row data
-
+			//setup for creating wheel visually
 			const size = this.settings.wheelSize;
 			const r = size / 2;
+			//NOTE: that cx and cy = r. so technically we can replace with r.
+			//I don't just cuz it's easier to understand formulaically
 			const cx = r;
 			const cy = r;
 			const n = rows.length;
@@ -222,8 +231,7 @@ export default class WheelPicker extends Plugin {
 		// Adds a pinwheel icon
 		//const item = this.addStatusBarItem();
 		//setIcon(item, "loader-pinwheel");
-
-		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
+		// adds text which would be changed to a number to indicate the # of wheels
 		//const statusBarItemEl = this.addStatusBarItem();
 		//statusBarItemEl.setText("X");
 	}
