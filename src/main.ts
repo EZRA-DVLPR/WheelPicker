@@ -18,7 +18,7 @@ export default class WheelPicker extends Plugin {
 
 	//used to updated statusbar - {# Icon}
 	private statusBarWheels = this.addStatusBarItem();
-	private statusBarWheelsText: HTMLElement;
+	private statusBarWheelText: HTMLElement;
 
 	async onload() {
 		await this.loadSettings();
@@ -296,7 +296,7 @@ export default class WheelPicker extends Plugin {
 	private async updateStatusBar() {
 		const file = this.app.workspace.getActiveFile();
 		if (!file) {
-			this.statusBarWheelsText.setText("0");
+			this.statusBarWheelText.setText("0");
 			return;
 		}
 
@@ -310,7 +310,7 @@ export default class WheelPicker extends Plugin {
 	}
 
 	//update status bar based on setting
-	private updateStatusBarVisibility() {
+	updateStatusBarVisibility() {
 		if (this.settings.displayStatus) {
 			//flex the goat fr
 			this.statusBarWheels.style.display = "flex";
