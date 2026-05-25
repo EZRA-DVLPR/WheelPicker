@@ -11,6 +11,7 @@ export interface WheelPickerSettings {
 	textColor: string;
 	useCustomColors: boolean;
 	customColors: string[];
+	displayStatus: boolean;
 }
 
 export const DEFAULT_SETTINGS: WheelPickerSettings = {
@@ -31,6 +32,7 @@ export const DEFAULT_SETTINGS: WheelPickerSettings = {
 		"#4b0082",
 		"#9400d3",
 	],
+	displayStatus: true,
 };
 
 export class WheelPickerSettingTab extends PluginSettingTab {
@@ -207,6 +209,22 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 			);
 		}
 
+		//displays # of wheels in the status bar
+		new Setting(containerEl)
+			.setName("Status Bar Display")
+			.setDesc(
+				"Toggle 'on' to display how many wheels are in the current note.",
+			)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.displayStatus)
+					.onChange(async (value) => {
+						this.plugin.settings.displayStatus = value;
+						await this.plugin.saveSettings();
+						this.plugin.updateStatusBarVisibility();
+					}),
+			);
+
 		//TODO: settings options:
 		//add history button
 		//
@@ -229,8 +247,9 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 								],
 							};
 							await this.plugin.saveSettings();
-							//re-renders the settings tab
+							//re-renders the settings tab and status bar
 							this.display();
+							this.plugin.updateStatusBarVisibility();
 						}).open();
 					}),
 			);

@@ -23,6 +23,24 @@ export default class WheelPicker extends Plugin {
 	async onload() {
 		await this.loadSettings();
 		this.addSettingTab(new WheelPickerSettingTab(this.app, this));
+		this.updateStatusBarVisibility();
+
+		//when switching notes, update status bar
+		this.registerEvent(
+			this.app.workspace.on("active-leaf-change", () => {
+				this.updateStatusBar();
+			}),
+		);
+
+		//when editing current file, update status bar
+		this.registerEvent(
+			this.app.vault.on("modify", (file) => {
+				const activeFile = this.app.workspace.getActiveFile();
+				if (activeFile && file.path === activeFile.path) {
+					this.updateStatusBar();
+				}
+			}),
+		);
 
 		//Adds text to indicate the # of wheels in current note
 		this.statusBarWheelText = this.statusBarWheels.createEl("span", {
@@ -35,13 +53,6 @@ export default class WheelPicker extends Plugin {
 		//adds pinwheel icon
 		const iconEl = this.statusBarWheels.createEl("span");
 		setIcon(iconEl, "loader-pinwheel");
-
-		//update status bar when switching notes
-		this.registerEvent(
-			this.app.workspace.on("active-leaf-change", () => {
-				this.updateStatusBar();
-			}),
-		);
 
 		// reads the markdown and displays its contents
 		// eg.
@@ -62,11 +73,6 @@ export default class WheelPicker extends Plugin {
 				});
 				return;
 			}
-
-			//adjust wheelCounts per note and then update status bar
-			const file = ctx.sourcePath;
-			this.wheelCounts.set(file, (this.wheelCounts.get(file) ?? 0) + 1);
-			this.updateStatusBar();
 
 			//create wheel div
 			const wheel = el.createEl("div", { cls: "wheel__container" });
@@ -154,7 +160,8 @@ export default class WheelPicker extends Plugin {
 					A ${r} ${r} 0 ${large} 1 ${x2} ${y2} 
 					Z`,
 				);
-				//assign slice attributes
+
+				//assign slice attributes and add to svg
 				path.setAttribute(
 					"fill",
 					//make the color white if there is none in customColors
@@ -202,7 +209,7 @@ export default class WheelPicker extends Plugin {
 					//over the coordinates (lx, ly)
 					`rotate(${mid * (180 / Math.PI)}, ${lx}, ${ly})`,
 				);
-				//insert the text
+				//insert the text into the svg
 				text.textContent = row;
 				svg.appendChild(text);
 			});
@@ -219,6 +226,7 @@ export default class WheelPicker extends Plugin {
 				cls: "wheel__btn",
 			});
 
+			//do spin when spin button is clicked
 			this.registerDomEvent(spinbtn, "click", () => {
 				//read duration setting when clicked
 				svg.style.setProperty(
@@ -251,6 +259,7 @@ export default class WheelPicker extends Plugin {
 				);
 			});
 
+			//animation end listener handling
 			const onAnimationEnd = () => {
 				svg.classList.remove("wheel__spin");
 			};
@@ -284,9 +293,29 @@ export default class WheelPicker extends Plugin {
 	}
 
 	//based on the current file, displays the amount of wheels in the status bar
-	private updateStatusBar() {
+	private async updateStatusBar() {
 		const file = this.app.workspace.getActiveFile();
-		const count = file ? (this.wheelCounts.get(file.path) ?? 0) : 0;
+		if (!file) {
+			this.statusBarWheelsText.setText("0");
+			return;
+		}
+
+		//reads the file for all ```wp 's and returns that as the count
+		const content = await this.app.vault.read(file);
+		const count = (content.match(/```wp/g) ?? []).length;
+
+		//displays count in status bar, and then update statusbar
 		this.statusBarWheelText.setText(` ${count} `);
+		this.updateStatusBarVisibility();
+	}
+
+	//update status bar based on setting
+	private updateStatusBarVisibility() {
+		if (this.settings.displayStatus) {
+			//flex the goat fr
+			this.statusBarWheels.style.display = "flex";
+		} else {
+			this.statusBarWheels.style.display = "none";
+		}
 	}
 }
