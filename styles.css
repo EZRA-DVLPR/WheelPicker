@@ -37,3 +37,8 @@
 	font-size: 2rem;
 	margin: 0;
 }
+
+/*flex the goat fr*/
+.wheel__status-bar--visible {
+	display: flex;
+}

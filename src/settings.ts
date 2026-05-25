@@ -211,7 +211,7 @@ export class WheelPickerSettingTab extends PluginSettingTab {
 
 		//displays # of wheels in the status bar
 		new Setting(containerEl)
-			.setName("Status Bar Display")
+			.setName("Status bar display")
 			.setDesc(
 				"Toggle 'on' to display how many wheels are in the current note.",
 			)

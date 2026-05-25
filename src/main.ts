@@ -28,16 +28,19 @@ export default class WheelPicker extends Plugin {
 		//when switching notes, update status bar
 		this.registerEvent(
 			this.app.workspace.on("active-leaf-change", () => {
-				this.updateStatusBar();
+				void this.updateStatusBar();
 			}),
 		);
+
+		//add styling for the status bar
+		this.statusBarWheels.addClass("wheel__status-bar--visible");
 
 		//when editing current file, update status bar
 		this.registerEvent(
 			this.app.vault.on("modify", (file) => {
 				const activeFile = this.app.workspace.getActiveFile();
 				if (activeFile && file.path === activeFile.path) {
-					this.updateStatusBar();
+					void this.updateStatusBar();
 				}
 			}),
 		);
@@ -312,10 +315,9 @@ export default class WheelPicker extends Plugin {
 	//update status bar based on setting
 	updateStatusBarVisibility() {
 		if (this.settings.displayStatus) {
-			//flex the goat fr
-			this.statusBarWheels.style.display = "flex";
+			this.statusBarWheels.addClass("wheel__status-bar--visible");
 		} else {
-			this.statusBarWheels.style.display = "none";
+			this.statusBarWheels.removeClass("wheel__status-bar--visible");
 		}
 	}
 }
